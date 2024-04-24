@@ -1,0 +1,37 @@
+// SPDX-License-Identifier: MIT 
+
+pragma solidity ^0.8.7; //^ means any newer version is ok
+
+contract SimpleStorage {
+    uint256 public favoritenumber;
+
+    struct People {
+        uint256 favoritenumber;
+        string name;
+    }
+
+    People[] public people; //a number inside [] specifies maximum amount of people in this array, if its empty then it will take infinite amount
+
+    function Store(uint256 _favoritenumber) public {
+        favoritenumber = _favoritenumber;
+    }
+    // view , pure are functions that DONT spend gas (doesnt modify blockchain state)
+    function retrieve() public view returns(uint256){
+        return favoritenumber; //retrieves uint variable from store function 
+    }
+
+    function addPerson(string memory _name, uint256 _favoritenumber) public {
+        People memory newPerson = People({favoritenumber: _favoritenumber, name: _name});
+        people.push(newPerson);
+    }
+}  
+
+//decoded input	{
+//	"string _name": "Oscar",
+//	"uint256 _favoritenumber": "6"
+//}
+
+// private functions only visible to current contract
+
+// public are visible externally and internally 
+
