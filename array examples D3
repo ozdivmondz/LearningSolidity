@@ -1,0 +1,8 @@
+
+uint[] public arr; //a public array of uint values 
+
+uint[] public arr2 = [1,2,3]; //an array that continuosly grows 
+
+uint[100] public FixedSizeArray; //a fixed size array (only 100 uint values)
+
+string[5] public names; //fixed array of 5 names 
