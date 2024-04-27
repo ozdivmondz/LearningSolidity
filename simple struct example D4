@@ -1,0 +1,10 @@
+contract CarRegistry {
+    struct Cars {
+        string brand;
+        string model;
+        uint256 year;
+        string color;
+        uint256 mileage;
+        string vin;
+    }
+}
