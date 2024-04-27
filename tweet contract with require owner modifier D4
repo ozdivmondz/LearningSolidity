@@ -1,0 +1,56 @@
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.8;
+
+contract Twitter {
+
+    uint16 MaxTweetLength = 280; //a constant value of uint16
+
+    struct Tweet {
+        address author;
+        string content;
+        uint256 timestamp;
+        uint256 likes;
+    }
+
+    mapping(address => Tweet[]) public tweets;
+
+    address public owner;
+
+    constructor(){
+        owner = msg.sender;
+    }
+
+    modifier CheckOwner(){ 
+        require(owner == msg.sender,"You are not the owner");
+        _;
+    }
+
+    function ChangeTweetLength(uint16 newTweetLength) public CheckOwner{ //checks if its the owner who is trying to change the length
+        MaxTweetLength = newTweetLength;
+    }
+
+    function CreateTweet(string memory _tweet) public{
+        //if tweet lenghth > than 280 chars then revert 
+        require(bytes(_tweet).length <= MaxTweetLength, "Tweet is too long!"); //requre the tweet to be less than 280 chars 
+
+
+        Tweet memory NewTweet = Tweet ({
+            author: msg.sender,
+            content: _tweet,
+            timestamp: block.timestamp,
+            likes: 0
+        });
+
+        tweets[msg.sender].push(NewTweet); //will be the person who's currently connecting with the contract.
+    }
+
+    function GetTweet(uint _i) public view returns (Tweet memory) { //_i is the index value that will be used in mapping the array 0 -> tweet #1
+        return tweets[msg.sender][_i]; //returns the tweet that was created and mapped to the address of msg.sender 
+    }
+
+    function GetAllTweets(address _owner) public view returns (Tweet[] memory){
+        return tweets[_owner]; //returns ALL tweets from the array
+    }
+}
+
