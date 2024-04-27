@@ -1,0 +1,57 @@
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.8;
+
+contract Twitter {
+
+    uint16 constant MaxTweetLength = 280; //a constant value of uint16 
+
+    struct Tweet {
+        address author;
+        string content;
+        uint256 timestamp;
+        uint256 likes;
+    }
+
+    mapping(address => Tweet[]) public tweets;
+
+    function CreateTweet(string memory _tweet) public{
+        //if tweet lenghth > than 280 chars then revert 
+        require(bytes(_tweet).length <= MaxTweetLength, "Tweet is too long!"); //requre the tweet to be less than 280 chars 
+
+
+        Tweet memory NewTweet = Tweet ({
+            author: msg.sender,
+            content: _tweet,
+            timestamp: block.timestamp,
+            likes: 0
+        });
+
+        tweets[msg.sender].push(NewTweet); //will be the person who's currently connecting with the contract.
+    }
+
+    function GetTweet(address _owner, uint _i) public view returns (Tweet memory) { //_i is the index value that will be used in mapping the array 0 -> tweet #1
+        return tweets[_owner][_i]; //returns the tweet that was created and mapped to the address of msg.sender 
+    }
+
+    function GetAllTweets(address _owner) public view returns (Tweet[] memory){
+        return tweets[_owner]; //returns ALL tweets from the array
+    }
+}
+
+//When a tweet of more than 280 chars was provided we got:
+
+//[vm]
+//from: 0x5B3...eddC4
+//to: Twitter.CreateTweet(string) 0xE3C...6005F
+//value: 0 wei
+//data: 0x2a1...00000
+//logs: 0
+//hash: 0xb5e...da08f
+
+//transact to Twitter.CreateTweet errored: Error occurred: revert.
+
+//revert
+//	The transaction has been reverted to the initial state.
+//Reason provided by the contract: "Tweet is too long!".
+//You may want to cautiously increase the gas limit if the transaction went out of gas.
