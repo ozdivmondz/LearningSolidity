@@ -1,0 +1,7 @@
+contract EvenExample {
+    event EventName(uint256 indexed data1, string data2)
+
+    function Somefunc {
+        emit EventName(data1,data2)
+    }
+}
